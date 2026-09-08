@@ -15,14 +15,14 @@ https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main/index.min.json
 index.min.json   ← índice que lee Mihon (no lo renombres)
 index.json       ← misma info, legible (opcional)
 apk/
-  tachiyomi-es.lectorxd-v1.4.2.apk   ← la extensión compilada y firmada
+  tachiyomi-es.lectorxd-v1.4.3.apk   ← la extensión compilada y firmada
 icon/
   eu.kanade.tachiyomi.extension.es.lectorxd.png
 ```
 
 - **Fuente:** LectorXD · idioma `es` · `https://lectorxd.com`
 - **Paquete:** `eu.kanade.tachiyomi.extension.es.lectorxd`
-- **Versión:** 1.4.2 (versionCode 104002)
+- **Versión:** 1.4.3 (versionCode 104003)
 
 ---
 
@@ -46,7 +46,7 @@ con una versión nueva (subiendo el `versionCode`) y Mihon detectará la actuali
 
 Si solo quieres probarla ya:
 
-1. Pasa `apk/tachiyomi-es.lectorxd-v1.4.2.apk` a tu móvil.
+1. Pasa `apk/tachiyomi-es.lectorxd-v1.4.3.apk` a tu móvil.
 2. Ábrelo y permite instalar apps de orígenes desconocidos.
 3. Mihon la reconocerá como fuente instalada.
    (Con este método no hay autoactualización; para eso usa la Opción A.)

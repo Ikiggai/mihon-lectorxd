@@ -184,7 +184,8 @@ abstract class LectorXD : HttpSource() {
 
         // Dates are only present on the rendered rows; map them by chapter number as a bonus.
         val dateByNumber = document.select("a[href*=/leer/]").associate { anchor ->
-            anchor.attr("href").substringAfterLast('/') to parseRelativeDate(anchor.parent()?.text().orEmpty())
+            val key = anchor.attr("href").substringAfterLast('/').substringBefore('?')
+            key to parseRelativeDate(anchor.parent()?.text().orEmpty())
         }
 
         if (numbers.isNotEmpty()) {
@@ -264,15 +265,23 @@ abstract class LectorXD : HttpSource() {
         val amount = match.groupValues[1].toIntOrNull() ?: return 0L
         val unit = match.groupValues[2].lowercase()
         val calendar = Calendar.getInstance()
+        // The site uses short English units (mo, y, w, d, h, min/m, s) plus some Spanish forms.
+        // Order matters: check "mo"/"mes" (month) before "m"/"min" (minute).
         when {
-            unit.startsWith("seg") || unit == "s" -> calendar.add(Calendar.SECOND, -amount)
-            unit.startsWith("min") -> calendar.add(Calendar.MINUTE, -amount)
-            unit.startsWith("h") -> calendar.add(Calendar.HOUR_OF_DAY, -amount)
-            unit.startsWith("d") -> calendar.add(Calendar.DAY_OF_YEAR, -amount)
-            unit.startsWith("sem") -> calendar.add(Calendar.WEEK_OF_YEAR, -amount)
-            unit.startsWith("mes") || unit == "m" -> calendar.add(Calendar.MONTH, -amount)
-            unit.startsWith("añ") || unit.startsWith("an") || unit == "a" || unit == "y" ->
+            unit.startsWith("mo") || unit.startsWith("mes") || unit.startsWith("month") ->
+                calendar.add(Calendar.MONTH, -amount)
+            unit == "y" || unit.startsWith("yr") || unit.startsWith("year") ||
+                unit.startsWith("añ") || unit.startsWith("an") || unit == "a" ->
                 calendar.add(Calendar.YEAR, -amount)
+            unit == "w" || unit.startsWith("wk") || unit.startsWith("week") || unit.startsWith("sem") ->
+                calendar.add(Calendar.WEEK_OF_YEAR, -amount)
+            unit == "d" || unit.startsWith("día") || unit.startsWith("dia") || unit.startsWith("day") ->
+                calendar.add(Calendar.DAY_OF_YEAR, -amount)
+            unit == "h" || unit.startsWith("hr") || unit.startsWith("hora") || unit.startsWith("hour") ->
+                calendar.add(Calendar.HOUR_OF_DAY, -amount)
+            unit == "m" || unit.startsWith("min") -> calendar.add(Calendar.MINUTE, -amount)
+            unit == "s" || unit.startsWith("seg") || unit.startsWith("sec") ->
+                calendar.add(Calendar.SECOND, -amount)
             else -> return 0L
         }
         return calendar.timeInMillis
