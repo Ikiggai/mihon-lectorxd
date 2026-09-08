@@ -2,10 +2,10 @@
   {
     "name": "LectorXD",
     "pkg": "eu.kanade.tachiyomi.extension.es.lectorxd",
-    "apk": "tachiyomi-es.lectorxd-v1.4.1.apk",
+    "apk": "tachiyomi-es.lectorxd-v1.4.2.apk",
     "lang": "es",
-    "code": 104001,
-    "version": "1.4.1",
+    "code": 104002,
+    "version": "1.4.2",
     "nsfw": 1,
     "sources": [
       {

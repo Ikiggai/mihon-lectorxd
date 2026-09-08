@@ -168,20 +168,48 @@ abstract class LectorXD : HttpSource() {
 
     override fun chapterListParse(response: Response): List<SChapter> {
         val document = response.asJsoup()
+        val mangaPath = response.request.url.encodedPath.removeSuffix("/")
+
+        // The web page only renders the latest ~20 chapters, but the FULL list is embedded
+        // (Astro island) inside a <script> as {"chapter":"N","groupId":...} objects.
+        val dataScript = document.select("script")
+            .maxByOrNull { CHAPTER_JSON_REGEX.findAll(it.data()).count() }
+            ?.data()
+            .orEmpty()
+
+        val numbers = CHAPTER_JSON_REGEX.findAll(dataScript)
+            .map { it.groupValues[1] }
+            .distinct()
+            .toList()
+
+        // Dates are only present on the rendered rows; map them by chapter number as a bonus.
+        val dateByNumber = document.select("a[href*=/leer/]").associate { anchor ->
+            anchor.attr("href").substringAfterLast('/') to parseRelativeDate(anchor.parent()?.text().orEmpty())
+        }
+
+        if (numbers.isNotEmpty()) {
+            return numbers.map { number ->
+                SChapter.create().apply {
+                    setUrlWithoutDomain("$mangaPath/leer/$number")
+                    name = "Capítulo $number"
+                    chapter_number = number.toFloatOrNull() ?: -1f
+                    date_upload = dateByNumber[number] ?: 0L
+                }
+            }.sortedByDescending { it.chapter_number }
+        }
+
+        // Fallback: parse the rendered chapter anchors if the embedded list is missing.
         return document.select("a[href*=/leer/]")
             .mapNotNull { anchor ->
                 val href = anchor.attr("href")
                 if (href.isBlank() || !href.contains("/leer/")) return@mapNotNull null
-
                 val number = CHAPTER_NUM_REGEX.find(anchor.attr("title"))?.groupValues?.get(1)
                     ?: href.substringAfterLast('/')
-                val rowText = anchor.parent()?.text().orEmpty()
-
                 SChapter.create().apply {
                     setUrlWithoutDomain(href)
                     name = "Capítulo $number"
                     chapter_number = number.toFloatOrNull() ?: -1f
-                    date_upload = parseRelativeDate(rowText)
+                    date_upload = parseRelativeDate(anchor.parent()?.text().orEmpty())
                 }
             }
             .distinctBy { it.url }
@@ -262,6 +290,9 @@ abstract class LectorXD : HttpSource() {
 
         private val TOTAL_REGEX = Regex("""de\s+([\d.,]+)\s+series""")
         private val CHAPTER_NUM_REGEX = Regex("""Cap[ií]tulo\s+([\d.]+)""", RegexOption.IGNORE_CASE)
+
+        // Full chapter list embedded in the page: {"chapter":"12","groupId":null}
+        private val CHAPTER_JSON_REGEX = Regex(""""chapter":"([^"]+)"""")
 
         // Matches the "schedule <n><unit>" relative date, e.g. "schedule 2d", "schedule 3 meses".
         private val RELATIVE_DATE_REGEX =
