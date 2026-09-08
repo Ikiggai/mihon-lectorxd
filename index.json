@@ -9,9 +9,9 @@
     "nsfw": 1,
     "sources": [
       {
-        "name": "LectorXD",
+        "id": 4078570629457850125,
         "lang": "es",
-        "id": "4078570629457850125",
+        "name": "LectorXD",
         "baseUrl": "https://lectorxd.com"
       }
     ]

@@ -3,10 +3,10 @@
 Extensión no oficial para leer **lectorxd.com** en Mihon (y forks: Komikku, TachiyomiSY, etc.).
 
 Repositorio ya publicado y listo para usar. Solo tienes que **añadir su URL en Mihon**
-(la URL base, **sin** `/index.min.json` — Mihon lo añade solo):
+(termina en `/index.min.json`):
 
 ```
-https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main
+https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main/index.min.json
 ```
 
 ## Contenido
@@ -29,9 +29,9 @@ icon/
 ## Opción A — Añadir el repositorio en Mihon (recomendado, con autoactualización)
 
 1. En Mihon: **Más → Ajustes → Explorar → Repositorios de extensiones → Añadir**,
-   pega esta URL **base** (sin `/index.min.json`, Mihon lo añade solo) y guarda:
+   pega esta URL y guarda:
    ```
-   https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main
+   https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main/index.min.json
    ```
    > Mihon descarga el índice desde `.../main/index.min.json` y los APK desde
    > `.../main/apk/…` automáticamente.
