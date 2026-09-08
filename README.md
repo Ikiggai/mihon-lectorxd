@@ -2,10 +2,11 @@
 
 Extensión no oficial para leer **lectorxd.com** en Mihon (y forks: Komikku, TachiyomiSY, etc.).
 
-Repositorio ya publicado y listo para usar. Solo tienes que **añadir su URL en Mihon**:
+Repositorio ya publicado y listo para usar. Solo tienes que **añadir su URL en Mihon**
+(la URL base, **sin** `/index.min.json` — Mihon lo añade solo):
 
 ```
-https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main/index.min.json
+https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main
 ```
 
 ## Contenido
@@ -28,12 +29,12 @@ icon/
 ## Opción A — Añadir el repositorio en Mihon (recomendado, con autoactualización)
 
 1. En Mihon: **Más → Ajustes → Explorar → Repositorios de extensiones → Añadir**,
-   pega esta URL y guarda:
+   pega esta URL **base** (sin `/index.min.json`, Mihon lo añade solo) y guarda:
    ```
-   https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main/index.min.json
+   https://raw.githubusercontent.com/Ikiggai/mihon-lectorxd/main
    ```
-   > Mihon descarga los APK automáticamente desde `.../main/apk/…`, por eso la
-   > carpeta `apk/` está junto a `index.min.json` en el repo.
+   > Mihon descarga el índice desde `.../main/index.min.json` y los APK desde
+   > `.../main/apk/…` automáticamente.
 2. Ve a **Explorar → Extensiones**, busca **LectorXD** e instálala.
    - La primera vez Mihon avisará de que la firma es desconocida (es normal en
      repos de terceros): acepta / confía en la extensión para instalarla.
